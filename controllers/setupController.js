@@ -24,8 +24,13 @@ export const setupController = (app) => {
       },
     ];
 
-    Todos.create(starterTodos, (err, results) => {
-      res.send(results);
-    });
+    Todos.create(starterTodos)
+      .then((results) => {
+        res.send(results);
+      })
+      .catch((err) => {
+        // handle error
+        res.status(500).send(err.message);
+      });
   });
 };

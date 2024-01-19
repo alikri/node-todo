@@ -14,12 +14,14 @@ const port = process.envPORT || 3000;
 app.use('/assets', express.static(path.join(__dirname, '/public')));
 
 app.set('view engine', 'ejs');
-mongoose
-  .connect(dBConnectionString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error(err));
+mongoose.connection.on('connected', () => {
+  console.log('Connected to MongoDB');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error(`Error connecting to MongoDB: ${err.message}`);
+});
+
+mongoose.connect(dBConnectionString);
 setupController(app);
 app.listen(port);

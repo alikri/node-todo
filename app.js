@@ -1,7 +1,7 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
-import dBConnectionString from './config/index';
+import dBConnectionString from "./config/index";
 import express from "express";
 const app = express();
 

@@ -1,6 +1,7 @@
 import path from "path";
 import { fileURLToPath } from "url";
-
+import mongoose from "mongoose";
+import dBConnectionString from './config/index';
 import express from "express";
 const app = express();
 
@@ -12,4 +13,5 @@ const port = process.envPORT || 3000;
 app.use("/assets", express.static(path.join(__dirname, "/public")));
 
 app.set("view engine", "ejs");
+mongoose.connect(dBConnectionString);
 app.listen(port);

@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import { dBConnectionString } from './config/index.js';
 import { setupController } from './controllers/setupController.js';
+import { apiController } from './controllers/apiController.js';
 import express from 'express';
 const app = express();
 
@@ -24,4 +25,5 @@ mongoose.connection.on('error', (err) => {
 
 mongoose.connect(dBConnectionString);
 setupController(app);
+apiController(app);
 app.listen(port);

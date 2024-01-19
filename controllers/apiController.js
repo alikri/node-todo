@@ -1,63 +1,63 @@
 import { Todos } from '../models/todoModel.js';
 import bodyParser from 'body-parser';
 
-export const someFunc = (app) => {
+export const apiController = (app) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  app.get('/api/todos/:uname', (req, res) => {
-    Todos.find({ username: req.params.uname }, (err, todos) => {
-      if (err) throw err;
-
+  app.get('/api/todos/:uname', async (req, res) => {
+    try {
+      const todos = await Todos.find({ username: req.params.uname });
       res.send(todos);
-    });
+    } catch (err) {
+      res.status(500).send(err);
+    }
   });
 
-  app.get('/api/todo/:id', (req, res) => {
-    Todos.findById({ _id: req.params.id }, (err, todo) => {
-      if (err) throw err;
-
+  app.get('/api/todo/:id', async (req, res) => {
+    try {
+      const todo = await Todos.findById(req.params.id);
       res.send(todo);
-    });
+    } catch (err) {
+      res.status(500).send(err);
+    }
   });
 
-  app.post('/api/todo', (req, res) => {
+  app.post('/api/todo', async (req, res) => {
     if (req.body.id) {
-      Todos.findByIdAndUpdate(
-        req.body.id,
-        {
+      try {
+        await Todos.findByIdAndUpdate(req.body.id, {
           todo: req.body.todo,
           isDone: req.body.isDone,
           hasAttachment: req.body.hasAttachment,
-        },
-        (err) => {
-          if (err) throw err;
-
-          res.send('Success');
-        },
-      );
+        });
+        res.send('Success');
+      } catch (err) {
+        res.status(500).send(err);
+      }
     } else {
-      let newTodo = Todos({
+      const newTodo = new Todos({
         username: 'test',
         todo: req.body.todo,
         isDone: req.body.isDone,
         hasAttachment: req.body.hasAttachment,
       });
 
-      newTodo.save((err) => {
-        if (err) throw err;
-
+      try {
+        await newTodo.save();
         res.send('Success');
-      });
+      } catch (err) {
+        res.status(500).send(err);
+      }
     }
   });
 
-  app.delete('/api/todo', (req, res) => {
-    Todos.findByIdAndDelete(req.body.id),
-      (err) => {
-        if (err) throw err;
-
-        res.send('Success');
-      };
+  app.delete('/api/todo', async (req, res) => {
+    try {
+      await Todos.findByIdAndDelete(req.body.id);
+      res.send('Success');
+    } catch (err) {
+      res.status(500).send(err);
+    }
   });
 };

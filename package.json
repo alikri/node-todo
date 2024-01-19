@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js",
-    "format:fix": "prettier \"**/*.{js,css}\" --write",
+    "format:fix": "prettier --config .prettierrc.cjs \"**/*.{js,css}\" --write",
+    "format": "prettier --config .prettierrc.cjs \"**/*.{js,css}\" --check",
     "lint": "npx eslint .",
+    "lint:fix": "npx eslint . --fix",
     "prepare": "husky install",
     "pre-commit": "npm run lint"
   },
